@@ -411,6 +411,7 @@ internal fun StudyScreen(
                         Spacer(Modifier.width(6.dp))
                         Text("Open in YouTube at this moment")
                     }
+                    YouTubeClipPlayer(phrase.videoId, phrase.startMs, phrase.endMs)
                 }
                 if (phrase.audioUri != null) {
                     Text("Imported local audio · playback follows the file's timeline",
