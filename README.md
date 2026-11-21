@@ -5,13 +5,13 @@ A native Android app for collecting and studying English phrases encountered on 
 ## Features implemented
 
 - Android share target for YouTube links, plus manual URL input.
-- In-app YouTube IFrame player (when the video allows embedding); a link always opens the original YouTube app/page.
+- In-app YouTube IFrame player with study-time A–B replay (when the video allows embedding); a link always opens the original YouTube app/page.
 - Capture phrases manually or from user-provided **SRT/WebVTT/plain-text** transcripts. Timed subtitles preserve their real timestamps; plain-text phrases are explicitly unaligned.
-- Editable quote, translation, note, collection, and start/end timestamps.
+- Editable quote, translation, note, collection, video timestamps, and independent imported-audio timestamps.
 - Offline Room database, searchable phrase library, collection and learning-status filters, edit and delete.
 - UK/US accent preference, optional IPA lookup by word from the public Free Dictionary API, with honest "unavailable" fallback and manual IPA editing. IPA is dictionary-based, **not** phonetic transcription of the speaker.
 - Native Android TextToSpeech set to en-GB/en-US when a language voice is available.
-- Clip-range playback for **user-imported local audio**; a YouTube source remains a link/player rather than an illegally downloaded audio file.
+- Clip-range playback with independent A–B timestamps for **user-imported local audio**; a YouTube source remains a link/player rather than an illegally downloaded audio file.
 - Optional draggable floating quick-capture bubble with explicit overlay permission and foreground notification.
 - CI builds a debug APK as a GitHub Actions artifact.
 

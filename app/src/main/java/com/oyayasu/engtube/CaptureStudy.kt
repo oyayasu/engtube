@@ -61,6 +61,8 @@ internal fun CaptureScreen(
     var from by remember(key) { mutableStateOf(SourceTools.clock(editing?.startMs ?: (SourceTools.youtube(seed)?.startMs ?: 0))) }
     var to by remember(key) { mutableStateOf(SourceTools.clock(editing?.endMs ?: ((SourceTools.youtube(seed)?.startMs ?: 0) + 3000))) }
     var audioUri by remember(key) { mutableStateOf(editing?.audioUri) }
+    var audioFrom by remember(key) { mutableStateOf(SourceTools.clock(editing?.audioStartMs ?: 0)) }
+    var audioTo by remember(key) { mutableStateOf(SourceTools.clock(editing?.audioEndMs ?: 3000)) }
     var lookingUp by remember { mutableStateOf(false) }
     var lookupMessage by remember { mutableStateOf("") }
     var webPlayer by remember(source?.id) { mutableStateOf<WebView?>(null) }
@@ -236,6 +238,16 @@ internal fun CaptureScreen(
                 Text("User-owned audio (optional)", fontWeight = FontWeight.Bold)
                 Text("Select a recording you have permission to use. No YouTube audio is downloaded.",
                     style = MaterialTheme.typography.bodySmall)
+                if (audioUri != null) {
+                    Text("Imported-audio timestamps are independent of YouTube timestamps.",
+                        style = MaterialTheme.typography.bodySmall)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedTextField(audioFrom, { audioFrom = it }, modifier = Modifier.weight(1f),
+                            label = { Text("Audio start") }, singleLine = true)
+                        OutlinedTextField(audioTo, { audioTo = it }, modifier = Modifier.weight(1f),
+                            label = { Text("Audio end") }, singleLine = true)
+                    }
+                }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     OutlinedButton(onClick = { audioPicker.launch(arrayOf("audio/*")) }) {
                         Icon(Icons.Default.AudioFile, null)
@@ -260,6 +272,10 @@ internal fun CaptureScreen(
                     url.isNotBlank() && source == null -> "The source must be a valid YouTube link."
                     start == null || end == null -> "Use a valid timestamp such as 01:23."
                     end <= start -> "End must be after start."
+                    audioUri != null && (SourceTools.parseClock(audioFrom) == null || SourceTools.parseClock(audioTo) == null) ->
+                        "Use valid imported-audio timestamps."
+                    audioUri != null && (SourceTools.parseClock(audioTo) ?: 0L) <= (SourceTools.parseClock(audioFrom) ?: 0L) ->
+                        "Imported-audio end must be after start."
                     else -> ""
                 }
                 if (error.isBlank() && start != null && end != null) {
@@ -268,6 +284,8 @@ internal fun CaptureScreen(
                         videoId = source?.id.orEmpty(), videoUrl = source?.url.orEmpty(),
                         title = title.trim(), startMs = start, endMs = end,
                         ipaUk = ipaUk.trim(), ipaUs = ipaUs.trim(), audioUri = audioUri,
+                        audioStartMs = SourceTools.parseClock(audioFrom) ?: 0L,
+                        audioEndMs = SourceTools.parseClock(audioTo) ?: 3000L,
                         collection = category.trim().ifBlank { "General" }
                     ))
                 }
@@ -411,16 +429,20 @@ internal fun StudyScreen(
                         Spacer(Modifier.width(6.dp))
                         Text("Open in YouTube at this moment")
                     }
+                    YouTubeClipPlayer(phrase.videoId, phrase.startMs, phrase.endMs)
                 }
                 if (phrase.audioUri != null) {
                     Text("Imported local audio · playback follows the file's timeline",
+                        style = MaterialTheme.typography.bodySmall)
+                    Text("Local clip: " + SourceTools.clock(phrase.audioStartMs) + " – " +
+                        SourceTools.clock(phrase.audioEndMs),
                         style = MaterialTheme.typography.bodySmall)
                     Row(verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(7.dp)) {
                         Button(onClick = {
                             if (playing) clipPlayer.stop() else clipPlayer.play(
                                 Uri.parse(phrase.audioUri),
-                                phrase.startMs, phrase.endMs, speed, repeat)
+                                phrase.audioStartMs, phrase.audioEndMs, speed, repeat)
                         }) {
                             Icon(if (playing) Icons.Default.Stop else Icons.Default.PlayArrow, null)
                             Spacer(Modifier.width(3.dp))

@@ -26,6 +26,8 @@ data class Phrase(
     val startMs: Long = 0,
     val endMs: Long = 0,
     val audioUri: String? = null,
+    val audioStartMs: Long = 0,
+    val audioEndMs: Long = 3000,
     val collection: String = "General",
     val status: String = "New",
     val createdAt: Long = System.currentTimeMillis()
