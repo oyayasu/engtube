@@ -26,6 +26,6 @@ class SourceToolsTest {
     }
     @Test fun rejectsInvalidTime() {
         assertNull(SourceTools.parseClock("12:65"))
-        assertEquals(90125, SourceTools.parseClock("01:30.125"))
+        assertEquals(90125L, SourceTools.parseClock("01:30.125"))
     }
 }
