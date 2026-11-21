@@ -30,7 +30,7 @@ Alternatively, GitHub Actions > **Android APK** > Run workflow (or push to main)
 For a local Gradle installation:
 
 \`\`\`sh
-gradle :app:assembleDebug
+./gradlew :app:assembleDebug
 \`\`\`
 
 ## How to use

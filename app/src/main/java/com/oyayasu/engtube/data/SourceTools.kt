@@ -55,9 +55,11 @@ object SourceTools {
 
     fun clock(ms: Long): String {
         val seconds = (ms.coerceAtLeast(0) / 1000)
-        return if (seconds >= 3600) "%02d:%02d:%02d".format(
+        val main = if (seconds >= 3600) "%02d:%02d:%02d".format(
             Locale.ROOT, seconds / 3600, seconds / 60 % 60, seconds % 60
         ) else "%02d:%02d".format(Locale.ROOT, seconds / 60, seconds % 60)
+        val millis = ms.coerceAtLeast(0) % 1000
+        return main + if (millis == 0L) "" else ".%03d".format(Locale.ROOT, millis)
     }
 
     fun parseClock(raw: String): Long? {

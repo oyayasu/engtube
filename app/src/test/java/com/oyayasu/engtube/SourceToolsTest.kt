@@ -24,6 +24,10 @@ class SourceToolsTest {
         assertEquals(2, captions.size)
         assertNull(captions[0].startMs)
     }
+    @Test fun keepsSubtitleMilliseconds() {
+        assertEquals("00:04.500", SourceTools.clock(4500))
+        assertEquals("01:30.125", SourceTools.clock(90125))
+    }
     @Test fun rejectsInvalidTime() {
         assertNull(SourceTools.parseClock("12:65"))
         assertEquals(90125L, SourceTools.parseClock("01:30.125"))
