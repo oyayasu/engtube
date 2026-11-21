@@ -8,7 +8,7 @@ class SourceToolsTest {
     @Test fun acceptsYouTubeOnly() {
         val source = SourceTools.youtube("See https://youtu.be/dQw4w9WgXcQ?t=1m12s")!!
         assertEquals("dQw4w9WgXcQ", source.id)
-        assertEquals(72000, source.startMs)
+        assertEquals(72000L, source.startMs)
         assertEquals(null, SourceTools.youtube("https://notyoutube.com/watch?v=dQw4w9WgXcQ"))
         assertEquals(null, SourceTools.youtube("https://youtube.com.evil.com/watch?v=dQw4w9WgXcQ"))
     }
