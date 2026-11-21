@@ -9,7 +9,7 @@ data class CaptionSegment(val text: String, val startMs: Long? = null, val endMs
 object SourceTools {
     private val link = Regex("""https?://[^\s<>"']+""", RegexOption.IGNORE_CASE)
     private val idPattern = Regex("^[A-Za-z0-9_-]{11}$")
-    private val timedLine = Regex("""(?m)^\s*((?:\d{1,2}:)?\d{2}:\d{2}[.,]\d{1,3})\s*-->\s*((?:\d{1,2}:)?\d{2}:\d{2}[.,]\d{1,3})(?:\s+.*)?$""")
+    private val timedLine = Regex("""(?m)^\s*((?:\d{1,2}:)?\d{2}:\d{2}[.,]\d{1,3})\s*-->\s*((?:\d{1,2}:)?\d{2}:\d{2}[.,]\d{1,3})(?:[ \t]+[^\r\n]*)?$""")
 
     fun youtube(source: String): VideoSource? {
         val raw = link.find(source)?.value?.trimEnd('.', ',', ')', ']', ';') ?: source.trim()
